@@ -51,18 +51,6 @@ for rows = 1:blockRows
     end
 end
 
-%displaying dct blocks 22 and 23 in row 30 to command window
-% disp('Block 22 DCT Coefficients:')
-% celldisp(dctBlockArray(30,22))
-% disp('Block 23 DCT Coefficients:')
-% celldisp(dctBlockArray(30,23))
-
-%displaying luminance component of dct blocks 22 and 23 in row 30
-% dct3022 = cell2mat(dctBlockArray(30,22));
-% dct3023 = cell2mat(dctBlockArray(30,23));
-% figure('Name', 'Image 30,22'), imshow(dct3022(:, :, 1))
-% figure('Name', 'Image 30,23'), imshow(dct3023(:, :, 1))
-
 %Creating quantization matrices from lecture notes
 Q = 28;
 
@@ -89,98 +77,6 @@ for rows = 1:blockRows
         quantizedArray(rows, cols) = {C};
     end
 end
-
-%Displaying blocks 22 and 23 DC luminance component
-% temp22 = cell2mat(quantizedArray(30,22));
-% disp('Block 22 DC Luminance Component:')
-% disp(temp22(1, 1, 1));
-% temp23 = cell2mat(quantizedArray(30,23));
-% disp('Block 23 DC Luminance Component:')
-% disp(temp23(1, 1, 1));
-
-%Creating vector of zig zag scanned coefficients
-%Referenced code from this link:
-%https://www.mathworks.com/matlabcentral/fileexchange/56332-zigzag-scan-any-n-n-matrix-bloc-of-image
-
-%Block 22
-% [~, N] = size(temp22(:, :, 1));
-% vect = zeros(1, N*N);
-% vect(1) = temp22(1, 1);
-% v = 1;
-% for k = 1:2*N-1
-%     if k <= N
-%         if mod(k,2) == 0
-%         j = k;
-%         for i = 1:k
-%             vect(v) = temp22(i, j, 1);
-%             v = v + 1; j = j - 1;
-%         end
-%         else
-%             i = k;
-%             for j = 1:k
-%                 vect(v) = temp22(i, j, 1);
-%                 v = v + 1; i = i - 1;
-%             end
-%         end
-%     else
-%         if mod(k, 2) == 0
-%             p = mod(k, N); j = N;
-%         for i = p + 1:N
-%             vect(v) = temp22(i, j, 1);
-%             v = v + 1; j = j - 1;
-%         end
-%         else
-%             p = mod(k, N); i = N;
-%             for j = p + 1:N
-%                 vect(v) = temp22(i, j, 1);
-%                 v = v + 1;i = i - 1;
-%             end
-%         end
-%     end
-% end
-
-% disp('Block 22 Zig Zag Scanned Coefficients:')
-% disp(vect)
-
-%Block 23
-% [~, N] = size(temp23(:, :, 1));
-% vect = zeros(1, N*N);
-% vect(1) = temp23(1, 1);
-% v = 1;
-% for k = 1:2*N-1
-%     if k <= N
-%         if mod(k,2) == 0
-%         j = k;
-%         for i = 1:k
-%             vect(v) = temp23(i, j, 1);
-%             v = v + 1; j = j - 1;
-%         end
-%         else
-%             i = k;
-%             for j = 1:k
-%                 vect(v) = temp23(i, j, 1);
-%                 v = v + 1; i = i - 1;
-%             end
-%         end
-%     else
-%         if mod(k, 2) == 0
-%             p = mod(k, N); j = N;
-%         for i = p + 1:N
-%             vect(v) = temp23(i, j, 1);
-%             v = v + 1; j = j - 1;
-%         end
-%         else
-%             p = mod(k, N); i = N;
-%             for j = p + 1:N
-%                 vect(v) = temp23(i, j, 1);
-%                 v = v + 1;i = i - 1;
-%             end
-%         end
-%     end
-% end
-
-% disp('Block 23 Zig Zag Scanned Coefficients:')
-% disp(vect)
 
 %Inverse Quantization
 dequantizedArray = cell(blockRows, blockCols);
@@ -220,20 +116,4 @@ end
 %Displaying final reconstructed RGB image
 reconstructedRGB = uint8(cell2mat(invDctBlockArray));
 
-% figure('Name', 'Final Image Comparison');
-% subplot(1, 2, 1), imshow(rgbImage)
-% title('RGB Image')
-% subplot(1, 2, 2), imshow(reconstructedRGB)
-% title('Reconstructed RGB Image')
-%
-% %Displaying error image
-% error = double(rgbImage) - double(reconstructedRGB);
-% figure('Name', 'Error Image'), imshow(error)
-% title('Error Image')
-
-%Computing PSNR of image
-% MSEarray = rgbImage - reconstructedRGB;
-% MSEvar = sum(sum(sum(MSEarray.^2)));
-% MSE = (1/(640*480))*MSEvar;
-% PSNR = 10*log(((255)^2)/MSE)
 end
