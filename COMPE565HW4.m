@@ -1,8 +1,7 @@
 %COMPE565 Homework 4
 %Nov. 21, 2019
 %Name: Seanmark Paz
-%ID: 820246863
-%Email: spaz@sdsu.edu
+
 
 video = VideoReader('football_qcif.avi');
 frames = read(video, [7, 11]);
